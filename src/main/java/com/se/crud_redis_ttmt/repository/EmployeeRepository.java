@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public class EmployeeRepository {
 
+    private static final String KEY = "EMPLOYEE";
+
     private HashOperations hashOperations;//crud hash
 
     private RedisTemplate redisTemplate;
@@ -17,20 +19,19 @@ public class EmployeeRepository {
     public EmployeeRepository(RedisTemplate redisTemplate) {
         this.hashOperations = redisTemplate.opsForHash();
         this.redisTemplate = redisTemplate;
-
     }
 
     public void saveEmployee(Employee employee){
-        hashOperations.put("EMPLOYEE", employee.getId(), employee);
+        hashOperations.put(KEY, employee.getId(), employee);
     }
 
     public List<Employee> findAll(){
-        return hashOperations.values("EMPLOYEE");
+        return hashOperations.values(KEY);
     }
 
     public Employee findById(Integer id){
 
-        return (Employee) hashOperations.get("EMPLOYEE", id);
+        return (Employee) hashOperations.get(KEY, id);
     }
 
     public void update(Employee employee){
@@ -38,6 +39,6 @@ public class EmployeeRepository {
     }
 
     public void delete(Integer id){
-        hashOperations.delete("EMPLOYEE", id);
+        hashOperations.delete(KEY, id);
     }
 }
