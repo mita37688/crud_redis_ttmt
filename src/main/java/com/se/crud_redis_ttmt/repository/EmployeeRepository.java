@@ -3,42 +3,39 @@ package com.se.crud_redis_ttmt.repository;
 import com.se.crud_redis_ttmt.model.Employee;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class EmployeeRepository {
 
-    private static final String KEY = "EMPLOYEE";
+    private static final String KEY = "EMPLOYEE_SET";
 
-    private HashOperations hashOperations;//crud hash
+    private SetOperations setOperations;
 
     private RedisTemplate redisTemplate;
 
     public EmployeeRepository(RedisTemplate redisTemplate) {
-        this.hashOperations = redisTemplate.opsForHash();
+        this.setOperations = redisTemplate.opsForSet();
         this.redisTemplate = redisTemplate;
     }
 
     public void saveEmployee(Employee employee){
-        hashOperations.put(KEY, employee.getId(), employee);
+        setOperations.add(KEY, employee);
     }
 
-    public List<Employee> findAll(){
-        return hashOperations.values(KEY);
-    }
-
-    public Employee findById(Integer id){
-
-        return (Employee) hashOperations.get(KEY, id);
+    public Set<Employee> findAll(){
+        return setOperations.members(KEY);
     }
 
     public void update(Employee employee){
         saveEmployee(employee);
     }
 
-    public void delete(Integer id){
-        hashOperations.delete(KEY, id);
+    public void delete(Employee employee){
+        setOperations.remove(KEY, employee);
     }
 }
