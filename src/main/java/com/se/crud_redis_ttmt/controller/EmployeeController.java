@@ -8,36 +8,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/employees")
 public class EmployeeController {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @PostMapping("/employees")
+    @PostMapping
     public Employee saveEmployee(@RequestBody Employee employee){
         employeeRepository.saveEmployee(employee);
         return employee;
     }
 
-    @GetMapping("/employees")
+    @GetMapping
     public List<Employee> findAll(){
         return employeeRepository.findAll();
     }
 
-    @GetMapping("/employees/{id}")
-    public Employee findById(@PathVariable("id") Integer id){
-
+    @GetMapping("/{id}")
+    public Employee findById(@PathVariable int id){
         return employeeRepository.findById(id);
     }
 
-    @PutMapping("/employees")
-    public void update(@RequestBody Employee employee){
+    @PutMapping("/{id}")
+    public void update(@RequestBody Employee employee, @PathVariable int id){
+        employeeRepository.delete(id);
         employeeRepository.update(employee);
     }
 
-    @DeleteMapping("/employees/{id}")
-    public void delete(@PathVariable("id") Integer id){
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id){
         employeeRepository.delete(id);
     }
 
