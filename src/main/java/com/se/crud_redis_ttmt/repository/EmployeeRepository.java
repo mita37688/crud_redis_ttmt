@@ -31,11 +31,21 @@ public class EmployeeRepository {
         return setOperations.members(KEY);
     }
 
+    public Employee findById(Integer id){
+        Set<Employee> employees = findAll();
+        for (Employee employee : employees){
+            if(employee.getId() == id){
+                return employee;
+            }
+        }
+        return null;
+    }
+
     public void update(Employee employee){
         saveEmployee(employee);
     }
 
-    public void delete(Employee employee){
-        setOperations.remove(KEY, employee);
+    public void delete(Integer id){
+        setOperations.remove(KEY, findById(id));
     }
 }

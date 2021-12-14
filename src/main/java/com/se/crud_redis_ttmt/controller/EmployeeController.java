@@ -26,14 +26,20 @@ public class EmployeeController {
         return employeeRepository.findAll();
     }
 
-    @PutMapping
-    public void update(@RequestBody Employee employee){
+    @GetMapping("/{id}")
+    public Employee findById(@PathVariable int id){
+        return employeeRepository.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public void update(@RequestBody Employee employee, @PathVariable int id){
+        employeeRepository.delete(id);
         employeeRepository.update(employee);
     }
 
-    @DeleteMapping
-    public void delete(@RequestBody Employee employee){
-        employeeRepository.delete(employee);
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id){
+        employeeRepository.delete(id);
     }
 
 }
